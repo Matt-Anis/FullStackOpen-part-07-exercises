@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Menu from "./components/Menu";
 import AnecdoteList from "./components/AnecdoteList";
@@ -7,10 +6,6 @@ import Footer from "./components/Footer";
 import CreateNew from "./components/CreateNew";
 
 const App = () => {
-  const addAnecdote = () => {
-    // Implementation for adding a new anecdote
-  };
-
   return (
     <Router>
       <div>
@@ -18,10 +13,7 @@ const App = () => {
         <Menu />
         <Routes>
           <Route path="/" element={<AnecdoteList />} />
-          <Route
-            path="/create"
-            element={<CreateNew addAnecdote={addAnecdote} />}
-          />
+          <Route path="/create" element={<CreateNew />} />
           <Route path="/about" element={<About />} />
         </Routes>
         <Footer />

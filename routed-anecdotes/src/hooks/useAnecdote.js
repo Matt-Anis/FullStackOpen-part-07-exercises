@@ -13,7 +13,13 @@ export const useAnecdote = () => {
     })();
   }, []);
 
+  const addAnecdote = async (anecdote) => {
+    const newAnecdote = await noteService.createNew(anecdote);
+    setAnecdotes(anecdotes.concat(newAnecdote));
+  };
+
   return {
     anecdotes,
+    addAnecdote,
   };
 };
