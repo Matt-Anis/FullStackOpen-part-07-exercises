@@ -18,8 +18,14 @@ export const useAnecdote = () => {
     setAnecdotes(anecdotes.concat(newAnecdote));
   };
 
+  const deleteAnecdote = async (id) => {
+    await noteService.deleteAnecdote(id);
+    setAnecdotes(anecdotes.filter((anecdote) => anecdote.id !== id));
+  };
+
   return {
     anecdotes,
     addAnecdote,
+    deleteAnecdote,
   };
 };

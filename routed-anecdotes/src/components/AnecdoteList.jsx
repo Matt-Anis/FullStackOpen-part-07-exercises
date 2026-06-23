@@ -1,14 +1,17 @@
 import { useAnecdote } from "../hooks/useAnecdote";
 
 const AnecdoteList = () => {
-  const { anecdotes } = useAnecdote();
+  const { anecdotes, deleteAnecdote } = useAnecdote();
 
   return (
     <div>
       <h2>Anecdotes</h2>
       <ul>
         {anecdotes.map((anecdote) => (
-          <li key={anecdote.id}>{anecdote.content}</li>
+          <div key={anecdote.id}>
+            <li>{anecdote.content}</li>
+            <button onClick={() => deleteAnecdote(anecdote.id)}>delete</button>
+          </div>
         ))}
       </ul>
     </div>
