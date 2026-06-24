@@ -16,19 +16,17 @@ import BlogList from './components/BlogList'
 import Blog from './components/Blog'
 import AppNotification from './components/AppNotification'
 import { setNotification } from './store/notificationStore'
+import { useBlogsActions, useBlogs } from './store/blogsStore'
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
+  const { initializeBlogs, setBlogs, addBlog } = useBlogsActions()
+  const blogs = useBlogs()
   const [user, setUser] = useState(null)
   const navigate = useNavigate()
 
   useEffect(() => {
-    const fetchBlogs = async () => {
-      const loadedBlogs = await blogService.getAll()
-      setBlogs(loadedBlogs)
-    }
-    fetchBlogs()
-  }, [])
+    initializeBlogs()
+  }, [initializeBlogs])
 
   useEffect(() => {
     const user = JSON.parse(window.localStorage.getItem('loggedBlogappUser'))
@@ -62,9 +60,7 @@ const App = () => {
 
   const handleBlogSubmit = async (blogObject) => {
     try {
-      const returnedBlog = await blogService.create(blogObject)
-
-      setBlogs(blogs.concat(returnedBlog))
+      const returnedBlog = addBlog(blogObject)
       navigate('/')
       setNotification(
         `A new blog "${returnedBlog.title}" by "${returnedBlog.author}" added!`,
