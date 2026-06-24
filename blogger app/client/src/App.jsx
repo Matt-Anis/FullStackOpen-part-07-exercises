@@ -15,11 +15,11 @@ import BlogForm from './components/BlogForm'
 import BlogList from './components/BlogList'
 import Blog from './components/Blog'
 import AppNotification from './components/AppNotification'
+import { setNotification } from './store/notificationStore'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
-  const [notification, setNotification] = useState(null)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -46,21 +46,9 @@ const App = () => {
       blogService.setToken(user.token)
       setUser(user)
 
-      setNotification({
-        text: 'Successfully Logged in',
-        type: 'success',
-      })
-      setTimeout(() => {
-        setNotification(null)
-      }, 5000)
+      setNotification('Successfully Logged in', 'success')
     } catch {
-      setNotification({
-        text: 'Wrong credentials',
-        type: 'error',
-      })
-      setTimeout(() => {
-        setNotification(null)
-      }, 5000)
+      setNotification('Wrong credentials', 'error')
     }
   }
 
@@ -69,13 +57,7 @@ const App = () => {
     setUser(null)
     blogService.setToken(null)
 
-    setNotification({
-      text: 'Successfully Logged out',
-      type: 'success',
-    })
-    setTimeout(() => {
-      setNotification(null)
-    }, 5000)
+    setNotification('Successfully Logged out', 'success')
   }
 
   const handleBlogSubmit = async (blogObject) => {
@@ -84,22 +66,12 @@ const App = () => {
 
       setBlogs(blogs.concat(returnedBlog))
       navigate('/')
-      setNotification({
-        text: `A new blog "${returnedBlog.title}" by "${returnedBlog.author}" added!`,
-        type: 'success',
-      })
-
-      setTimeout(() => {
-        setNotification(null)
-      }, 5000)
+      setNotification(
+        `A new blog "${returnedBlog.title}" by "${returnedBlog.author}" added!`,
+        'success',
+      )
     } catch (error) {
-      setNotification({
-        text: `${error}`,
-        type: 'error',
-      })
-      setTimeout(() => {
-        setNotification(null)
-      }, 5000)
+      setNotification(`${error}`, 'error')
     }
   }
 
@@ -107,21 +79,9 @@ const App = () => {
     try {
       const response = await blogService.update(id, newBlog)
       setBlogs(blogs.map((blog) => (blog.id !== id ? blog : response.data)))
-      setNotification({
-        text: 'Successfully Liked the blog!',
-        type: 'success',
-      })
-      setTimeout(() => {
-        setNotification(null)
-      }, 5000)
+      setNotification('Successfully Liked the blog!', 'success')
     } catch (error) {
-      setNotification({
-        text: error,
-        type: 'error',
-      })
-      setTimeout(() => {
-        setNotification(null)
-      }, 5000)
+      setNotification(error, 'error')
     }
   }
 
@@ -130,22 +90,9 @@ const App = () => {
       await blogService.deleteBlog(id)
       setBlogs(blogs.filter((blog) => blog.id !== id))
 
-      setNotification({
-        text: `Blog successfully deleted`,
-        type: 'success',
-      })
-
-      setTimeout(() => {
-        setNotification(null)
-      }, 5000)
+      setNotification(`Blog successfully deleted`, 'success')
     } catch (error) {
-      setNotification({
-        text: `${error}`,
-        type: 'error',
-      })
-      setTimeout(() => {
-        setNotification(null)
-      }, 5000)
+      setNotification(`${error}`, 'error')
     }
   }
 
@@ -185,7 +132,7 @@ const App = () => {
           )}
         </Toolbar>
       </AppBar>
-      <AppNotification notification={notification} />
+      <AppNotification />
       <Routes>
         <Route path="/" element={<BlogList blogs={blogs} />} />
         <Route
