@@ -22,7 +22,6 @@ const App = () => {
   const { initializeBlogs, setBlogs, addBlog } = useBlogsActions()
   const blogs = useBlogs()
   const [user, setUser] = useState(null)
-  const navigate = useNavigate()
 
   useEffect(() => {
     initializeBlogs()
@@ -56,19 +55,6 @@ const App = () => {
     blogService.setToken(null)
 
     setNotification('Successfully Logged out', 'success')
-  }
-
-  const handleBlogSubmit = async (blogObject) => {
-    try {
-      const returnedBlog = addBlog(blogObject)
-      navigate('/')
-      setNotification(
-        `A new blog "${returnedBlog.title}" by "${returnedBlog.author}" added!`,
-        'success',
-      )
-    } catch (error) {
-      setNotification(`${error}`, 'error')
-    }
   }
 
   const incrementLike = async (id, newBlog) => {
@@ -158,13 +144,7 @@ const App = () => {
         />
         <Route
           path="/create"
-          element={
-            user ? (
-              <BlogForm createBlog={handleBlogSubmit} />
-            ) : (
-              <Navigate replace to="/" />
-            )
-          }
+          element={user ? <BlogForm /> : <Navigate replace to="/" />}
         />
         <Route path="*" element={<h2>404 - Page Not Found</h2>} />
       </Routes>
