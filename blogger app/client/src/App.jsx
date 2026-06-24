@@ -1,12 +1,5 @@
 import { useState, useEffect } from 'react'
-import {
-  Link,
-  Route,
-  Routes,
-  Navigate,
-  useMatch,
-  useNavigate,
-} from 'react-router-dom'
+import { Link, Route, Routes, Navigate, useMatch } from 'react-router-dom'
 import { Container, AppBar, Toolbar, Button } from '@mui/material'
 import blogService from './services/blogs'
 import loginService from './services/login'
@@ -16,16 +9,11 @@ import BlogList from './components/BlogList'
 import Blog from './components/Blog'
 import AppNotification from './components/AppNotification'
 import { setNotification } from './store/notificationStore'
-import { useBlogsActions, useBlogs } from './store/blogsStore'
+import { useBlogs } from './store/blogsStore'
 
 const App = () => {
-  const { initializeBlogs, setBlogs, addBlog } = useBlogsActions()
   const blogs = useBlogs()
   const [user, setUser] = useState(null)
-
-  useEffect(() => {
-    initializeBlogs()
-  }, [initializeBlogs])
 
   useEffect(() => {
     const user = JSON.parse(window.localStorage.getItem('loggedBlogappUser'))
@@ -57,26 +45,26 @@ const App = () => {
     setNotification('Successfully Logged out', 'success')
   }
 
-  const incrementLike = async (id, newBlog) => {
-    try {
-      const response = await blogService.update(id, newBlog)
-      setBlogs(blogs.map((blog) => (blog.id !== id ? blog : response.data)))
-      setNotification('Successfully Liked the blog!', 'success')
-    } catch (error) {
-      setNotification(error, 'error')
-    }
-  }
+  // const incrementLike = async (id, newBlog) => {
+  //   try {
+  //     const response = await blogService.update(id, newBlog)
+  //     setBlogs(blogs.map((blog) => (blog.id !== id ? blog : response.data)))
+  //     setNotification('Successfully Liked the blog!', 'success')
+  //   } catch (error) {
+  //     setNotification(error, 'error')
+  //   }
+  // }
 
-  const handleBlogDelete = async (id) => {
-    try {
-      await blogService.deleteBlog(id)
-      setBlogs(blogs.filter((blog) => blog.id !== id))
+  // const handleBlogDelete = async (id) => {
+  //   try {
+  //     await blogService.deleteBlog(id)
+  //     setBlogs(blogs.filter((blog) => blog.id !== id))
 
-      setNotification(`Blog successfully deleted`, 'success')
-    } catch (error) {
-      setNotification(`${error}`, 'error')
-    }
-  }
+  //     setNotification(`Blog successfully deleted`, 'success')
+  //   } catch (error) {
+  //     setNotification(`${error}`, 'error')
+  //   }
+  // }
 
   const match = useMatch('/blogs/:id')
   const blog = match ? blogs.find((blog) => blog.id === match.params.id) : null
@@ -129,18 +117,7 @@ const App = () => {
         />
         <Route
           path="/blogs/:id"
-          element={
-            blog ? (
-              <Blog
-                blog={blog}
-                deleteBlog={handleBlogDelete}
-                like={incrementLike}
-                user={user}
-              />
-            ) : (
-              <Navigate replace to="/" />
-            )
-          }
+          element={blog ? <Blog blog={blog} /> : <Navigate replace to="/" />}
         />
         <Route
           path="/create"
