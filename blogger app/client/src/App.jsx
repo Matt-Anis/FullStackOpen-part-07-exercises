@@ -223,6 +223,7 @@ const App = () => {
             )
           }
         />
+        <Route path="*" element={<h2>404 - Page Not Found</h2>} />
       </Routes>
     </Container>
   )
