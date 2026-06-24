@@ -4,9 +4,6 @@ import { Button, TextField, Container } from '@mui/material'
 const LoginForm = ({ login }) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [showPassword, setShowPassword] = useState(false)
-
-  const handleClickShowPassword = () => setShowPassword((show) => !show)
 
   const handleLogin = (event) => {
     event.preventDefault()
