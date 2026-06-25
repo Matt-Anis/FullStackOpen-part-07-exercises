@@ -1,49 +1,24 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import { Link, Route, Routes, Navigate, useMatch } from 'react-router-dom'
 import { Container, AppBar, Toolbar, Button } from '@mui/material'
-import blogService from './services/blogs'
-import loginService from './services/login'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import BlogList from './components/BlogList'
 import Blog from './components/Blog'
 import AppNotification from './components/AppNotification'
-import { setNotification } from './store/notificationStore'
-import { useBlogs } from './store/blogsStore'
+import { useBlogs, useBlogsActions } from './store/blogsStore'
+import { useUser, useUserActions } from './store/userStore'
 
 const App = () => {
   const blogs = useBlogs()
-  const [user, setUser] = useState(null)
+  const user = useUser()
+  const { initializeUser, logout } = useUserActions()
+  const { initializeBlogs } = useBlogsActions()
 
   useEffect(() => {
-    const user = JSON.parse(window.localStorage.getItem('loggedBlogappUser'))
-    if (user) {
-      setUser(user)
-      blogService.setToken(user.token)
-    }
-  }, [])
-
-  const handleLogin = async (userObject) => {
-    try {
-      const user = await loginService.login(userObject)
-
-      window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user))
-      blogService.setToken(user.token)
-      setUser(user)
-
-      setNotification('Successfully Logged in', 'success')
-    } catch {
-      setNotification('Wrong credentials', 'error')
-    }
-  }
-
-  const handleLogout = async () => {
-    window.localStorage.removeItem('loggedBlogappUser')
-    setUser(null)
-    blogService.setToken(null)
-
-    setNotification('Successfully Logged out', 'success')
-  }
+    initializeUser()
+    initializeBlogs()
+  }, [initializeUser, initializeBlogs])
 
   // const incrementLike = async (id, newBlog) => {
   //   try {
@@ -91,7 +66,7 @@ const App = () => {
               <Button color="inherit" component={Link} to="/create">
                 new blog
               </Button>
-              <Button variant="outlined" color="inherit" onClick={handleLogout}>
+              <Button variant="outlined" color="inherit" onClick={logout}>
                 logout
               </Button>
             </>
@@ -104,16 +79,10 @@ const App = () => {
       </AppBar>
       <AppNotification />
       <Routes>
-        <Route path="/" element={<BlogList blogs={blogs} />} />
+        <Route path="/" element={<BlogList />} />
         <Route
           path="/login"
-          element={
-            user ? (
-              <Navigate replace to="/" />
-            ) : (
-              <LoginForm login={handleLogin} />
-            )
-          }
+          element={user ? <Navigate replace to="/" /> : <LoginForm />}
         />
         <Route
           path="/blogs/:id"

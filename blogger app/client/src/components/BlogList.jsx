@@ -1,13 +1,8 @@
 import { Link } from 'react-router-dom'
-import { useEffect } from 'react'
-import { useBlogs, useBlogsActions } from '../store/blogsStore'
+import { useBlogs } from '../store/blogsStore'
 
 const BlogList = () => {
-  const { initializeBlogs } = useBlogsActions()
   const blogs = useBlogs()
-  useEffect(() => {
-    initializeBlogs()
-  }, [initializeBlogs])
   return (
     <div>
       <h2>blogs</h2>

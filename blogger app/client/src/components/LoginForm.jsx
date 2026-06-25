@@ -1,7 +1,9 @@
 import { useState } from 'react'
 import { Button, TextField, Container } from '@mui/material'
+import { useUserActions } from '../store/userStore'
 
-const LoginForm = ({ login }) => {
+const LoginForm = () => {
+  const { login } = useUserActions()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
