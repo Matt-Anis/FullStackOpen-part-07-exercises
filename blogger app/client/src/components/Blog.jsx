@@ -1,8 +1,12 @@
 import { Card, CardContent, Typography, Button } from '@mui/material'
+import { useBlogsActions } from '../store/blogsStore'
+import { useUser } from '../store/userStore'
 
-const Blog = ({ user, blog, like, deleteBlog }) => {
+const Blog = ({ blog }) => {
+  const user = useUser()
+  const { likeBlog, deleteBlog } = useBlogsActions()
   const handleLike = async () => {
-    await like(blog.id, { likes: blog.likes + 1 })
+    await likeBlog(blog)
   }
 
   const handleDeleteBlog = async () => {

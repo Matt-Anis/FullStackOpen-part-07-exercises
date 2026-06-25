@@ -20,27 +20,6 @@ const App = () => {
     initializeBlogs()
   }, [initializeUser, initializeBlogs])
 
-  // const incrementLike = async (id, newBlog) => {
-  //   try {
-  //     const response = await blogService.update(id, newBlog)
-  //     setBlogs(blogs.map((blog) => (blog.id !== id ? blog : response.data)))
-  //     setNotification('Successfully Liked the blog!', 'success')
-  //   } catch (error) {
-  //     setNotification(error, 'error')
-  //   }
-  // }
-
-  // const handleBlogDelete = async (id) => {
-  //   try {
-  //     await blogService.deleteBlog(id)
-  //     setBlogs(blogs.filter((blog) => blog.id !== id))
-
-  //     setNotification(`Blog successfully deleted`, 'success')
-  //   } catch (error) {
-  //     setNotification(`${error}`, 'error')
-  //   }
-  // }
-
   const match = useMatch('/blogs/:id')
   const blog = match ? blogs.find((blog) => blog.id === match.params.id) : null
 

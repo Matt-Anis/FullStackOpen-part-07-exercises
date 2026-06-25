@@ -53,7 +53,7 @@ blogRouter.delete('/:id', async (request, response) => {
     return response.status(404).json({ error: 'blog not found' })
   }
 
-  if (user.id !== blog.user.id) {
+  if (user.id !== blog.user.toString()) {
     return response.status(401).json({ error: 'Unauthorized operation' })
   }
 
