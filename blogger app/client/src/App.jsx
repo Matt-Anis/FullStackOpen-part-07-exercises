@@ -6,19 +6,19 @@ import BlogForm from './components/BlogForm'
 import BlogList from './components/BlogList'
 import Blog from './components/Blog'
 import AppNotification from './components/AppNotification'
-import { useBlogs, useBlogsActions } from './store/blogsStore'
+import { useBlogs } from './hooks/useBlogs'
 import { useUser, useUserActions } from './store/userStore'
 
 const App = () => {
-  const blogs = useBlogs()
+  const { blogs } = useBlogs()
   const user = useUser()
   const { initializeUser, logout } = useUserActions()
-  const { initializeBlogs } = useBlogsActions()
+  // const { initializeBlogs } = useBlogsActions()
 
   useEffect(() => {
     initializeUser()
-    initializeBlogs()
-  }, [initializeUser, initializeBlogs])
+    // initializeBlogs()
+  }, [initializeUser])
 
   const match = useMatch('/blogs/:id')
   const blog = match ? blogs.find((blog) => blog.id === match.params.id) : null
