@@ -1,15 +1,23 @@
 import { create } from 'zustand'
 import blogService from '../services/blogs'
 import { setNotification } from './notificationStore'
+// import { useNotificationReducer } from '../context/notificationContext'
 
 const useBlogsStore = create((set) => ({
   blogs: [],
   actions: {
     setBlogs: (blogs) => set({ blogs }),
     addBlog: async (blog) => {
-      const newBlog = await blogService.create(blog)
-      set((state) => ({ blogs: [...state.blogs, newBlog] }))
-      return newBlog
+      try {
+        const newBlog = await blogService.create(blog)
+        set((state) => ({ blogs: [...state.blogs, newBlog] }))
+        setNotification(
+          `A new blog "${newBlog.title}" by "${newBlog.author}" added!`,
+          'success',
+        )
+      } catch (error) {
+        setNotification(`${error}`, 'error')
+      }
     },
     initializeBlogs: async () => {
       const initialBlogs = await blogService.getAll()
