@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import useField from '../hooks/useField'
 import { Button, TextField, Container } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import { useBlogs } from '../hooks/useBlogs'
@@ -6,17 +6,17 @@ import { useBlogs } from '../hooks/useBlogs'
 const BlogForm = () => {
   const { addBlog } = useBlogs()
   const navigate = useNavigate()
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
+  const title = useField()
+  const author = useField()
+  const url = useField()
 
   const handleBlogSubmit = async (event) => {
     event.preventDefault()
 
-    await addBlog({ title, author, url })
-    setAuthor('')
-    setTitle('')
-    setUrl('')
+    await addBlog({ title: title.value, author: author.value, url: url.value })
+    author.clear()
+    title.clear()
+    url.clear()
     navigate('/')
   }
 
@@ -33,23 +33,23 @@ const BlogForm = () => {
         <TextField
           label="Title"
           variant="outlined"
-          value={title}
-          onChange={({ target }) => setTitle(target.value)}
+          value={title.value}
+          onChange={title.onChange}
         />
 
         <TextField
           label="Author"
           variant="outlined"
-          value={author}
-          onChange={({ target }) => setAuthor(target.value)}
+          value={author.value}
+          onChange={author.onChange}
         />
 
         <TextField
           label="URL"
           variant="outlined"
           type="url"
-          value={url}
-          onChange={({ target }) => setUrl(target.value)}
+          value={url.value}
+          onChange={url.onChange}
         />
 
         <Button variant="contained" type="submit">

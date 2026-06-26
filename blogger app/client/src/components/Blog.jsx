@@ -1,9 +1,10 @@
 import { Card, CardContent, Typography, Button } from '@mui/material'
 import { useBlogs } from '../hooks/useBlogs'
-import { useUser } from '../store/userStore'
+import UserContext from '../context/userContext'
+import { useContext } from 'react'
 
 const Blog = ({ blog }) => {
-  const user = useUser()
+  const { user } = useContext(UserContext)
   const { likeBlog, deleteBlog } = useBlogs()
   const handleLike = async () => {
     await likeBlog(blog)
