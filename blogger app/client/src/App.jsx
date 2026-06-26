@@ -6,22 +6,29 @@ import BlogForm from './components/BlogForm'
 import BlogList from './components/BlogList'
 import Blog from './components/Blog'
 import UsersTable from './components/UsersTable'
+import User from './components/User'
 import AppNotification from './components/AppNotification'
 import { useBlogs } from './hooks/useBlogs'
 import UserContext from './context/userContext'
+import { useUsers } from './hooks/useUsers'
 
 const App = () => {
   const { blogs } = useBlogs()
   const { user, initializeUser, logout } = useContext(UserContext)
-  // const { initializeBlogs } = useBlogsActions()
+  const { users } = useUsers()
 
   useEffect(() => {
     initializeUser()
-    // initializeBlogs()
   }, [initializeUser])
 
-  const match = useMatch('/blogs/:id')
-  const blog = match ? blogs.find((blog) => blog.id === match.params.id) : null
+  const blogMatch = useMatch('/blogs/:id')
+  const userMatch = useMatch('/users/:id')
+  const blog = blogMatch
+    ? blogs.find((blog) => blog.id === blogMatch.params.id)
+    : null
+  const matchedUser = userMatch
+    ? users.find((user) => user.id === userMatch.params.id)
+    : null
 
   return (
     <Container>
@@ -70,6 +77,16 @@ const App = () => {
         <Route
           path="/blogs/:id"
           element={blog ? <Blog blog={blog} /> : <Navigate replace to="/" />}
+        />
+        <Route
+          path="/users/:id"
+          element={
+            matchedUser ? (
+              <User user={matchedUser} />
+            ) : (
+              <Navigate replace to="/" />
+            )
+          }
         />
         <Route
           path="/create"

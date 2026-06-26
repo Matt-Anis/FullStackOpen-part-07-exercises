@@ -7,6 +7,7 @@ import {
   Table,
 } from '@mui/material'
 import { useUsers } from '../hooks/useUsers'
+import { Link } from 'react-router-dom'
 
 const UserTable = () => {
   const { users, isPending } = useUsers()
@@ -25,8 +26,10 @@ const UserTable = () => {
         </TableHead>
         <TableBody>
           {users.map((user) => (
-            <TableRow>
-              <TableCell>{user.name}</TableCell>
+            <TableRow key={user?.id}>
+              <TableCell>
+                <Link to={`/users/${user.id}`}>{user.name}</Link>
+              </TableCell>
               <TableCell>{user.username}</TableCell>
               <TableCell>{user.blogs.length}</TableCell>
             </TableRow>
