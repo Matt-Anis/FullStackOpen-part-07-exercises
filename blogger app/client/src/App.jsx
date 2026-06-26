@@ -5,6 +5,7 @@ import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import BlogList from './components/BlogList'
 import Blog from './components/Blog'
+import UsersTable from './components/UsersTable'
 import AppNotification from './components/AppNotification'
 import { useBlogs } from './hooks/useBlogs'
 import UserContext from './context/userContext'
@@ -38,6 +39,9 @@ const App = () => {
         <Toolbar>
           <Button color="inherit" component={Link} to="/">
             blogs
+          </Button>{' '}
+          <Button color="inherit" component={Link} to="/users">
+            users
           </Button>
           {user ? (
             <>
@@ -62,6 +66,7 @@ const App = () => {
           path="/login"
           element={user ? <Navigate replace to="/" /> : <LoginForm />}
         />
+        <Route path="/users" element={<UsersTable />} />
         <Route
           path="/blogs/:id"
           element={blog ? <Blog blog={blog} /> : <Navigate replace to="/" />}

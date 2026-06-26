@@ -33,6 +33,10 @@ blogRouter.post('/', async (request, response) => {
     username: 1,
     name: 1,
   })
+
+  user.blogs.push(savedBlog._id)
+  await user.save()
+
   response.status(201).json(result)
 })
 
