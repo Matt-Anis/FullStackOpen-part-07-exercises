@@ -2,6 +2,7 @@ import { create } from 'zustand'
 import loginService from '../services/login'
 import { setNotification } from './notificationStore'
 import blogService from '../services/blogs'
+import userPersistentService from '../services/userPersistent'
 
 const useUserStore = create((set) => ({
   user: null,
@@ -10,10 +11,7 @@ const useUserStore = create((set) => ({
       try {
         const newUser = await loginService.login(userObject)
 
-        window.localStorage.setItem(
-          'loggedBlogappUser',
-          JSON.stringify(newUser),
-        )
+        userPersistentService.saveUser(JSON.stringify(newUser))
         blogService.setToken(newUser.token)
         set({ user: newUser })
 
@@ -23,14 +21,14 @@ const useUserStore = create((set) => ({
       }
     },
     logout: () => {
-      window.localStorage.removeItem('loggedBlogappUser')
+      userPersistentService.removeUser()
       set({ user: null })
       blogService.setToken(null)
 
       setNotification('Successfully Logged out', 'success')
     },
     initializeUser: () => {
-      const user = JSON.parse(window.localStorage.getItem('loggedBlogappUser'))
+      const user = JSON.parse(userPersistentService.getUser())
       if (user) {
         set({ user })
         blogService.setToken(user.token)

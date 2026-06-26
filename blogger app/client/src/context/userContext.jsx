@@ -2,6 +2,7 @@ import { createContext, useState, useCallback } from 'react'
 import { setNotification } from '../store/notificationStore'
 import loginService from '../services/login'
 import blogService from '../services/blogs'
+import userPersistentService from '../services/userPersistent'
 
 const UserContext = createContext()
 
@@ -14,7 +15,7 @@ export const UserContextProvider = (props) => {
     try {
       const newUser = await loginService.login(userObject)
 
-      window.localStorage.setItem('loggedBlogappUser', JSON.stringify(newUser))
+      userPersistentService.saveUser(JSON.stringify(newUser))
       blogService.setToken(newUser.token)
       setUser(newUser)
 
@@ -25,7 +26,7 @@ export const UserContextProvider = (props) => {
   }
 
   const logout = () => {
-    window.localStorage.removeItem('loggedBlogappUser')
+    userPersistentService.getUser()
     setUser(null)
     blogService.setToken(null)
 
@@ -33,7 +34,7 @@ export const UserContextProvider = (props) => {
   }
 
   const initializeUser = useCallback(() => {
-    const user = JSON.parse(window.localStorage.getItem('loggedBlogappUser'))
+    const user = JSON.parse(userPersistentService.getUser())
     if (user) {
       setUser(user)
       blogService.setToken(user.token)
