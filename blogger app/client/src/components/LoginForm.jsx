@@ -1,9 +1,9 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import { Button, TextField, Container } from '@mui/material'
-import { useUserActions } from '../store/userStore'
+import UserContext from '../context/userContext'
 
 const LoginForm = () => {
-  const { login } = useUserActions()
+  const { login } = useContext(UserContext)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 

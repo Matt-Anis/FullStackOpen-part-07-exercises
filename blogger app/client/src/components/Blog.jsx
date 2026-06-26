@@ -1,10 +1,8 @@
 import { Card, CardContent, Typography, Button } from '@mui/material'
 import { useBlogs } from '../hooks/useBlogs'
 import { useUser } from '../store/userStore'
-import { useNavigate } from 'react-router-dom'
 
 const Blog = ({ blog }) => {
-  const navigate = useNavigate()
   const user = useUser()
   const { likeBlog, deleteBlog } = useBlogs()
   const handleLike = async () => {

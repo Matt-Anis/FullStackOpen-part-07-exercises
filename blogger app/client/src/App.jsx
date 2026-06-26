@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useContext } from 'react'
 import { Link, Route, Routes, Navigate, useMatch } from 'react-router-dom'
 import { Container, AppBar, Toolbar, Button } from '@mui/material'
 import LoginForm from './components/LoginForm'
@@ -7,12 +7,11 @@ import BlogList from './components/BlogList'
 import Blog from './components/Blog'
 import AppNotification from './components/AppNotification'
 import { useBlogs } from './hooks/useBlogs'
-import { useUser, useUserActions } from './store/userStore'
+import UserContext from './context/userContext'
 
 const App = () => {
   const { blogs } = useBlogs()
-  const user = useUser()
-  const { initializeUser, logout } = useUserActions()
+  const { user, initializeUser, logout } = useContext(UserContext)
   // const { initializeBlogs } = useBlogsActions()
 
   useEffect(() => {
