@@ -4,7 +4,13 @@ import {
   Typography,
   Button,
   TextField,
-  Container,
+  Stack,
+  List,
+  Box,
+  Divider,
+  Link,
+  ListItem,
+  ListItemText,
 } from '@mui/material'
 import { useBlogs } from '../hooks/useBlogs'
 import UserContext from '../context/userContext'
@@ -36,43 +42,90 @@ const Blog = ({ blog }) => {
   return (
     <Card data-testid="blog-container">
       <CardContent>
-        <Typography variant="h4">{blog.title}</Typography>
-        <Typography variant="body" color="textSecondary">
-          <a href={blog.url} target="_blank" rel="noopener noreferrer">
-            {blog.url}
-          </a>
-        </Typography>
-        <Typography variant="body2">by: {blog.author}</Typography>
-        <Typography variant="body2">Likes: {blog.likes}</Typography>
-        {user && <Button onClick={handleLike}>Like</Button>}
-        <Typography variant="body2">
-          Added by: {blog?.user?.username}
-        </Typography>
-        {user?.username === blog?.user?.username && (
-          <Button onClick={handleDeleteBlog} color="error">
-            Remove
-          </Button>
-        )}
-        <h3>Comments</h3>
-        <Container>
-          <form onSubmit={handleCommentSubmit}>
+        <Stack spacing={2}>
+          {/* Header */}
+          <Box>
+            <Typography variant="h4">{blog.title}</Typography>
+            <Typography variant="body2" color="textSecondary">
+              <Link href={blog.url} target="_blank" rel="noopener noreferrer">
+                {blog.url}
+              </Link>
+            </Typography>
+            <Typography variant="body2" color="textSecondary">
+              by {blog.author}
+            </Typography>
+          </Box>
+
+          <Divider />
+
+          {/* Likes */}
+          <Stack direction="row" alignItems="center" spacing={1}>
+            <Typography variant="body2">Likes: {blog.likes}</Typography>
+            {user && (
+              <Button size="small" variant="outlined" onClick={handleLike}>
+                👍 Like
+              </Button>
+            )}
+          </Stack>
+
+          {/* Meta */}
+          <Stack
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <Typography variant="body2" color="textSecondary">
+              Added by: {blog?.user?.username}
+            </Typography>
+            {user?.username === blog?.user?.username && (
+              <Button
+                size="small"
+                variant="outlined"
+                color="error"
+                onClick={handleDeleteBlog}
+              >
+                Remove
+              </Button>
+            )}
+          </Stack>
+
+          <Divider />
+
+          {/* Comments */}
+          <Typography variant="h6">Comments</Typography>
+
+          <Stack
+            component="form"
+            onSubmit={handleCommentSubmit}
+            direction="row"
+            spacing={1}
+          >
             <TextField
               required
-              label="comment"
+              label="Comment"
               variant="outlined"
+              size="small"
+              fullWidth
               value={comment.value}
               onChange={comment.onChange}
             />
-            <Button variant="contained" type="submit">
-              submit
+            <Button
+              variant="contained"
+              type="submit"
+              sx={{ whiteSpace: 'nowrap' }}
+            >
+              Add
             </Button>
-          </form>
-        </Container>
-        <ul>
-          {blog?.comments.map((comment) => (
-            <li key={Math.random() * 100000}>{comment}</li>
-          ))}
-        </ul>
+          </Stack>
+
+          <List dense>
+            {blog?.comments.map((comment, i) => (
+              <ListItem key={i} disableGutters>
+                <ListItemText primary={comment} />
+              </ListItem>
+            ))}
+          </List>
+        </Stack>
       </CardContent>
     </Card>
   )
