@@ -36,6 +36,7 @@ const useBlogsStore = create((set) => ({
         setNotification(error, 'error')
       }
     },
+
     deleteBlog: async (id) => {
       try {
         await blogService.deleteBlog(id)

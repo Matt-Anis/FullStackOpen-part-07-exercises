@@ -1,12 +1,21 @@
-import { Card, CardContent, Typography, Button } from '@mui/material'
+import {
+  Card,
+  CardContent,
+  Typography,
+  Button,
+  TextField,
+  Container,
+} from '@mui/material'
 import { useBlogs } from '../hooks/useBlogs'
 import UserContext from '../context/userContext'
 import { useContext } from 'react'
-import { randomUUID } from 'crypto'
+import useField from '../hooks/useField'
 
 const Blog = ({ blog }) => {
   const { user } = useContext(UserContext)
-  const { likeBlog, deleteBlog } = useBlogs()
+  const { likeBlog, deleteBlog, commentBlog } = useBlogs()
+  const comment = useField()
+
   const handleLike = async () => {
     await likeBlog(blog)
   }
@@ -16,6 +25,12 @@ const Blog = ({ blog }) => {
       return
     }
     await deleteBlog(blog.id)
+  }
+
+  const handleCommentSubmit = async (event) => {
+    event.preventDefault()
+    await commentBlog(blog.id, comment.value)
+    comment.clear()
   }
 
   return (
@@ -39,9 +54,23 @@ const Blog = ({ blog }) => {
           </Button>
         )}
         <h3>Comments</h3>
+        <Container>
+          <form onSubmit={handleCommentSubmit}>
+            <TextField
+              required
+              label="comment"
+              variant="outlined"
+              value={comment.value}
+              onChange={comment.onChange}
+            />
+            <Button variant="contained" type="submit">
+              submit
+            </Button>
+          </form>
+        </Container>
         <ul>
           {blog?.comments.map((comment) => (
-            <li key={randomUUID()}>{comment}</li>
+            <li key={Math.random() * 100000}>{comment}</li>
           ))}
         </ul>
       </CardContent>

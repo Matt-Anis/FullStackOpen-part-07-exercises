@@ -1,16 +1,17 @@
-import { useState, useContext } from 'react'
+import { useContext } from 'react'
 import { Button, TextField, Container } from '@mui/material'
 import UserContext from '../context/userContext'
+import useField from '../hooks/useField'
 
 const LoginForm = () => {
   const { login } = useContext(UserContext)
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
+  const username = useField()
+  const password = useField()
 
   const handleLogin = (event) => {
     event.preventDefault()
 
-    login({ username, password })
+    login({ username: username.value, password: password.value })
   }
 
   const style = {
@@ -27,15 +28,15 @@ const LoginForm = () => {
           required
           label="username"
           variant="outlined"
-          value={username}
-          onChange={({ target }) => setUsername(target.value)}
+          value={username.value}
+          onChange={username.onChange}
         />
         <TextField
           type="password"
           label="password"
           variant="outlined"
-          value={password}
-          onChange={({ target }) => setPassword(target.value)}
+          value={password.value}
+          onChange={password.onChange}
         />
         <Button variant="contained" type="submit">
           login

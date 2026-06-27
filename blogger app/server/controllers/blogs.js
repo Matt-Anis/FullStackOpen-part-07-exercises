@@ -40,6 +40,24 @@ blogRouter.post('/', async (request, response) => {
   response.status(201).json(result)
 })
 
+blogRouter.put('/:id/comment', async (request, response) => {
+  const updatedBlog = await Blog.findByIdAndUpdate(
+    request.params.id,
+    { $push: { comments: request.body.comment } },
+    { new: true, runValidators: true }
+  )
+  if (!updatedBlog) {
+    return response.status(404).json({ error: 'blog not found' })
+  }
+
+  const result = await updatedBlog.populate('user', {
+    username: 1,
+    name: 1,
+  })
+
+  response.status(200).json(result)
+})
+
 blogRouter.delete('/:id', async (request, response) => {
   const decodedToken = jwt.verify(request.token, process.env.SECRET)
   if (!decodedToken.id) {
